@@ -20,7 +20,7 @@ pip install transformers modelscope peft swanlab
 python qwen_ft.py
 ```
 
-- 开始训练会自动下载`Qwen2.5-0.5B`模型，请确保你的设备有几个GB的空间
+- 开始训练会自动下载`Qwen2.5-0.5B`模型，请确保你的设备有1GB以上的空间
 - 训练需要登陆`swanlab`，请根据指引完成注册或登录
 
 ## 测试
