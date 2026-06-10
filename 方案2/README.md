@@ -9,8 +9,11 @@
 | `cot_train_basemodel.jsonl` | Base model 零-shot CoT 推理的原始输出（11,955条） |
 | `train_cot_kaggle.py` | LoRA CoT 训练脚本，基于 train_cot.json 对 Qwen2.5-0.5B-Instruct 进行 SFT（Kaggle 双卡 DDP） |
 | `infer_cot_kaggle.py` | LoRA 模型 CoT 推理脚本，加载训练好的 LoRA 权重进行推理 |
+| `train_dpo.py` | DPO 训练脚本：合并 SFT LoRA → 用 train_cot.json（chosen）和 reject.json（rejected）做 DPO 训练 |
+| `infer_dpo_kaggle.py` | DPO LoRA 推理脚本：先合并 SFT LoRA，再加载 DPO LoRA，Beam=5 推理 |
 | `submit1.csv` | LoRA 模型在测试集上的提交结果 |
-| `final/` | 训练好的 LoRA 模型权重（PEFT adapter），含 adapter_model.safetensors、tokenizer 等 |
+| `final/` | 训练好的 SFT LoRA 模型权重（PEFT adapter），含 adapter_model.safetensors、tokenizer 等 |
+| `dpo_lora/` | 训练好的 DPO LoRA 模型权重（PEFT adapter），含 adapter_model.safetensors、tokenizer 等 |
 
 ## 数据格式
 
@@ -32,4 +35,5 @@
 1. `gen_cot.py` → 调用 DeepSeek API 生成 CoT → `train_cot.json`
 2. `train_cot_kaggle.py` → 用 train_cot.json LoRA SFT 训练 → `final/`
 3. `infer_fewshot.py` → Base model 零-shot 推理 → `cot_train_basemodel.jsonl`
-4. 后续：用 reject.json 做 DPO 训练，提升模型正确率
+4. `train_dpo.py` → 用 train_cot.json（chosen）+ reject.json（rejected）做 DPO 训练 → `dpo_lora/`
+5. `infer_dpo_kaggle.py` → 加载 SFT LoRA + DPO LoRA 推理 → `cot_dpo_output_4000.jsonl`
